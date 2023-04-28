@@ -6,7 +6,7 @@ import EditableSpan from 'components/EditableSpan/EditableSpan';
 import {RequestStatusType} from "app/app-reducer";
 import { TaskStatuses, TasksType } from './tasks-reducer';
 import {useSelector} from "react-redux";
-import {AppRootStateType} from "app/store";
+import { selectEntityStatus } from './task.selectors';
 
 type TaskPropsType = {
     task: TasksType
@@ -17,7 +17,7 @@ type TaskPropsType = {
     entityStatus: RequestStatusType
 }
 export const Task = React.memo((props: TaskPropsType) => {
-    const entityStatus = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+    const entityStatus = useSelector(selectEntityStatus)
     const onClickHandler = useCallback(() => {
         props.removeTask(props.task.id, props.todolistId)
     }, [props.task.id, props.todolistId]);

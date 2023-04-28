@@ -29,9 +29,9 @@ type PropsType = {
 export const Todolist = React.memo(function (props: PropsType) {
 
     const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(fetchTasksTC(props.id))
-    }, [])
+    // useEffect(() => {
+    //     dispatch(fetchTasksTC(props.id))
+    // }, [])
 
     console.log('Todolist called')
     const addTask = useCallback((title: string) => {

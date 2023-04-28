@@ -1,15 +1,14 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI} from "api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "utils/error-utils";
-import {authActions} from "features/Login/auth-reducer";
+import {authActions} from "features/Auth/auth-reducer";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-export type ErrorType = any
 
 const initialState = {
     status: 'loading' as RequestStatusType,
     error: null as string | null,
-    initialized: false as boolean
+    initialized: false
 }
 
 export type AppInitialStateType = typeof initialState
@@ -48,30 +47,3 @@ export const initializeAppTC = (): any => async (dispatch: any) => {
         handleServerNetworkError(e, dispatch)
     }
 }
-
-// export const _appReducer = (state: InitialStateType = initialState, action: ApplicationActionsType): InitialStateType => {
-//     switch (action.type) {
-//         case 'APP/SET-STATUS':
-//             return {...state, status: action.status}
-//         case 'APP/SET-ERROR':
-//             return {...state, error: action.error}
-//         case 'APP/SET-INITIALIZED':
-//             return {...state, initialized: action.value}
-//         default:
-//             return state
-//     }
-// }
-
-// actions
-// export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const)
-// export const setAppErrorAC = (error: ErrorType) => ({type: 'APP/SET-ERROR', error} as const)
-// export const setInitializedAC = (value: boolean) => ({type: 'APP/SET-INITIALIZED', value} as const)
-
-// types
-// export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>
-// export type SetAppErrorActionType = ReturnType<typeof setAppErrorAC>
-// export type SetInitializedActionType = ReturnType<typeof setInitializedAC>
-// export type ApplicationActionsType =
-//     | SetAppStatusActionType
-//     | SetAppErrorActionType
-//     | SetInitializedActionType

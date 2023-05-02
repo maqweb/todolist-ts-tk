@@ -6,6 +6,7 @@ import {
 import {handleServerAppError, handleServerNetworkError} from "utils/error-utils";
 import {fetchTasksTC, TodolistType} from "./Task/tasks-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {clearData, ClearDataType} from "common/common.actions";
 
 
 const initialState: Array<TodolistDomainType> = []
@@ -36,9 +37,15 @@ const slice = createSlice({
             const todolist = state.find(todo => todo.id === action.payload.todolistId)
             if (todolist) todolist.entityStatus = action.payload.status
         },
-        clearData: (() => {
-            return []
-        })
+        // clearData: (() => {
+        //     return []
+        // })
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(clearData, () => {
+                return []
+            })
     }
 })
 

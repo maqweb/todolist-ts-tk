@@ -6,7 +6,7 @@ import {Delete} from '@mui/icons-material';
 import {Task} from './Task/Task'
 import EditableSpan from "components/EditableSpan/EditableSpan";
 import {FilterValuesType} from './todolists-reducer';
-import {fetchTasksTC, TaskStatuses, TasksType} from "./Task/tasks-reducer";
+import { TaskStatuses, TasksType} from "./Task/tasks-reducer";
 import {useDispatch} from "react-redux";
 import {RequestStatusType} from "app/app-reducer";
 

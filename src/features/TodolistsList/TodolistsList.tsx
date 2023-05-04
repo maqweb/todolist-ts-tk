@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, { useCallback, useEffect } from "react";
 import {
     createTodolistTC,
     fetchTodolistTC,
@@ -7,14 +7,20 @@ import {
     TodolistDomainType, todolistsActions,
     updateTodolistTitleTC
 } from "./Todolist/todolists-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "app/store";
-import {addTaskTC, removeTaskTC, TasksStateType, TaskStatuses, updateTaskModelTC} from "./Todolist/Task/tasks-reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { AppRootStateType } from "app/store";
+import {
+    addTaskTC,
+    removeTaskTC,
+    TasksStateType,
+    TaskStatuses,
+    updateTaskModelTC
+} from "./Todolist/Task/tasks-reducer";
 import Grid from "@mui/material/Grid";
-import {AddItemForm} from "components/AddItemForm/AddItemForm";
+import { AddItemForm } from "components/AddItemForm/AddItemForm";
 import Paper from "@mui/material/Paper";
-import {Todolist} from "./Todolist/Todolist";
-import {Navigate} from "react-router-dom";
+import { Todolist } from "./Todolist/Todolist";
+import { Navigate } from "react-router-dom";
 
 export const TodolistsList: React.FC = () => {
 

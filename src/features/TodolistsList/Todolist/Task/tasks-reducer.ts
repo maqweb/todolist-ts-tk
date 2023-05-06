@@ -1,5 +1,4 @@
 import { AddTaskArgType, todolistAPI, UpdateTaskArgType } from "api/todolist-api";
-import { AppRootStateType } from "app/store";
 import { appActions, RequestStatusType } from "app/app-reducer";
 import { handleServerAppError, handleServerNetworkError } from 'utils/error-utils';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
@@ -89,12 +88,6 @@ const slice = createSlice({
             const index = tasks.findIndex((t) => t.id === action.payload.taskId)
             if (index !== -1) tasks.splice(index, 1)
         }),
-        // updateTask: ((state, action: PayloadAction<{ todolistId: string, taskId: string, model: UpdateTaskModelType }>) => {
-        //     const tasks = state[action.payload.todolistId]
-        //     const index = tasks.findIndex(t => t.id === action.payload.taskId)
-        //     if (index !== -1) tasks[index] = {...tasks[index], ...action.payload.model}
-        // }),
-
     },
     extraReducers: (builder) => {
         builder
@@ -144,41 +137,6 @@ export const removeTaskTC = (taskId: string, todolistId: string): any => async (
         handleServerNetworkError(e, dispatch)
     }
 }
-// export const _updateTaskModelTC = (todolistId: string, taskId: string, model: UpdateTaskModelType): any =>
-//     async (dispatch: any, getState: () => AppRootStateType) => {
-//         dispatch(appActions.setAppStatus({status: 'loading'}))
-//         const state = getState()
-//         const tasksForCurrentTodolist = state.tasks[todolistId]
-//         const task = tasksForCurrentTodolist.find(t => t.id === taskId)
-//
-//         if (!task) {
-//             console.warn('task not found in the state')
-//             return
-//         }
-//
-//         const apiModel: UpdateTaskModelType = {
-//             title: task.title,
-//             startDate: task.startDate,
-//             priority: task.priority,
-//             description: task.description,
-//             deadline: task.deadline,
-//             status: task.status,
-//             ...model
-//         }
-//         if (task) {
-//             let updateTask = await todolistAPI.updateTask(todolistId, taskId, apiModel)
-//             try {
-//                 if (updateTask.data.resultCode === 0) {
-//                     dispatch(tasksAction.({todolistId, taskId, model}))
-//                     dispatch(appActions.setAppStatus({status: 'succeeded'}))
-//                 } else {
-//                     handleServerAppError(updateTask.data, dispatch)
-//                 }
-//             } catch (e: any) {
-//                 handleServerNetworkError(e, dispatch)
-//             }
-//         }
-//     }
 
 // types
 export type TasksStateType = {

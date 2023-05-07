@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import {TodolistsList} from "features/TodolistsList/TodolistsList";
 import {CircularProgress, LinearProgress} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {ErrorSnackbar} from "components/ErrorSnackbar/ErrorSnackbar";
+import {ErrorSnackbar} from "common/components/ErrorSnackbar/ErrorSnackbar";
 import {Routes, Route, Navigate} from 'react-router-dom'
 import {Auth} from "features/Auth/Auth";
 import {logoutTC} from 'features/Auth/auth-reducer';

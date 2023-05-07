@@ -1,5 +1,7 @@
-import { tasksAction, tasksReducer, TasksStateType, TaskStatuses, tasksThunks, TodolistType } from './tasks-reducer'
-import {todolistsActions} from "features/TodolistsList/Todolist/todolists-reducer";
+import { tasksAction, tasksReducer, TasksStateType, tasksThunks } from './tasks-reducer'
+import {todolistsActions} from "features/TodolistsList/todolists-reducer";
+import { TaskStatuses } from "common/enums/common.enums";
+import { TodolistType } from "features/TodolistsList/todolists-api";
 
 let startState: TasksStateType
 
@@ -183,16 +185,25 @@ test('correct task should be added to correct array', () => {
 })
 
 test('status of specified task should be changed', () => {
-    const action = tasksThunks.updateTaskModel({todolistId: 'todolistId2', taskId: '2', model: {status: 0}})
-    // const endState = tasksReducer(startState, action)
-    // expect(endState['todolistId2'][1].status).toBe(TaskStatuses.New)
-    // expect(endState['todolistId2'][2].status).toBe(TaskStatuses.New)
+    const args = {todolistId: 'todolistId2', taskId: '2', model: {status: 0}}
+    const action = tasksThunks.updateTaskModel.fulfilled(
+        args,
+        'requestId',
+        args)
+    const endState = tasksReducer(startState, action)
+    expect(endState['todolistId2'][1].status).toBe(TaskStatuses.New)
+    expect(endState['todolistId2'][2].status).toBe(TaskStatuses.New)
 })
 
 test('title task should be changed', () => {
-    const action = tasksThunks.updateTaskModel({todolistId: 'todolistId2', taskId: '2', model: {title: 'orange'}})
-    // const endState = tasksReducer(startState, action)
-    // expect(endState['todolistId2'][1].title).toBe('orange')
+    const args = {todolistId: 'todolistId2', taskId: '2', model: {title: 'orange'}}
+    const action = tasksThunks.updateTaskModel.fulfilled(
+        args,
+        'requestId',
+        args
+        )
+    const endState = tasksReducer(startState, action)
+    expect(endState['todolistId2'][1].title).toBe('orange')
 })
 
 test('new array should be added when new todolist is added', () => {

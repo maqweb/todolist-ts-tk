@@ -2,9 +2,9 @@ import {
     FilterValuesType,
     TodolistDomainType, todolistsActions,
     todolistsReducer
-} from './todolists-reducer'
+} from 'features/TodolistsList/todolists-reducer'
 import {v1} from 'uuid'
-import {TodolistType} from './Task/tasks-reducer'
+import { TodolistType } from "features/TodolistsList/todolists-api";
 
 
 let todolistId1: string

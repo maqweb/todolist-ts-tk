@@ -1,10 +1,16 @@
-import { AddTaskArgType, todolistAPI, UpdateTaskArgType } from "api/todolist-api";
-import { appActions, RequestStatusType } from "app/app-reducer";
-import { handleServerAppError, handleServerNetworkError } from 'utils/error-utils';
+import { appActions } from "app/app-reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { todolistsActions } from "features/TodolistsList/Todolist/todolists-reducer";
-import { clearData } from "common/common.actions";
-import { createAppAsyncThunk } from "utils/create-app-async-thunk";
+import { todolistsActions } from "features/TodolistsList/todolists-reducer";
+import { clearData } from "common/actions/common.actions";
+import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils";
+import { ResultCode } from "common/enums/common.enums";
+import {
+    AddTaskArgType,
+    TasksType,
+    todolistAPI,
+    UpdateTaskArgType,
+    UpdateTaskModelType
+} from "features/TodolistsList/todolists-api";
 
 
 const fetchTasks = createAppAsyncThunk<{ tasks: TasksType[], todolistId: string }, string>
@@ -26,7 +32,7 @@ const addTask = createAppAsyncThunk<{ task: TasksType }, AddTaskArgType>
     const {dispatch, rejectWithValue} = thunkAPI
     try {
         let res = await todolistAPI.createTask(arg)
-        if (res.data.resultCode === 0) {
+        if (res.data.resultCode === ResultCode.success) {
             dispatch(appActions.setAppStatus({status: 'succeeded'}))
             const task = res.data.data.item
             return {task}
@@ -62,7 +68,7 @@ const updateTaskModel = createAppAsyncThunk<UpdateTaskArgType, UpdateTaskArgType
             }
 
             const res = await todolistAPI.updateTask(arg.todolistId, arg.taskId, apiModel)
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(appActions.setAppStatus({status: 'succeeded'}))
                 return arg
             } else {
@@ -141,50 +147,6 @@ export const removeTaskTC = (taskId: string, todolistId: string): any => async (
 // types
 export type TasksStateType = {
     [key: string]: Array<TasksType>
-}
-
-export enum TaskStatuses {
-    New = 0,
-    InProgress = 1,
-    Completed = 2,
-    Draft = 3
-}
-
-export enum TaskPriorities {
-    Low = 0,
-    Middle = 1,
-    Hi = 2,
-    Urgently = 3,
-    Later = 4
-}
-
-export type UpdateTaskModelType = {
-    title?: string
-    description?: string
-    status?: TaskStatuses
-    priority?: TaskPriorities
-    startDate?: string
-    deadline?: string
-}
-export type TodolistType = {
-    id: string
-    title: string
-    addedDate: string
-    order: number
-}
-export type TasksType = {
-    description: string
-    title: string
-    completed: boolean
-    status: number
-    priority: number
-    startDate: string
-    deadline: string
-    id: string
-    todoListId: string
-    order: number
-    addedDate: number
-    entityStatus?: RequestStatusType
 }
 
 

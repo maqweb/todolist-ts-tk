@@ -1,14 +1,15 @@
-import React, {useCallback, useEffect} from 'react'
-import {AddItemForm} from 'components/AddItemForm/AddItemForm'
+import React, {useCallback} from 'react'
+import {AddItemForm} from 'common/components/AddItemForm/AddItemForm'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import {Delete} from '@mui/icons-material';
 import {Task} from './Task/Task'
-import EditableSpan from "components/EditableSpan/EditableSpan";
-import {FilterValuesType} from './todolists-reducer';
-import { TaskStatuses, TasksType} from "./Task/tasks-reducer";
+import {FilterValuesType} from 'features/TodolistsList/todolists-reducer';
 import {useDispatch} from "react-redux";
 import {RequestStatusType} from "app/app-reducer";
+import { EditableSpan } from "common/components";
+import { TasksType } from "features/TodolistsList/todolists-api";
+import { TaskStatuses } from "common/enums/common.enums";
 
 
 type PropsType = {

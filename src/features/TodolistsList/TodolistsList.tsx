@@ -4,22 +4,20 @@ import {
     fetchTodolistTC,
     FilterValuesType,
     removeTodolistTC,
-    TodolistDomainType, todolistsActions,
+    TodolistDomainType,
+    todolistsActions,
     updateTodolistTitleTC
-} from "./Todolist/todolists-reducer";
+} from "features/TodolistsList/todolists-reducer";
 import { useSelector } from "react-redux";
 import { AppRootStateType } from "app/store";
-import {
-    removeTaskTC,
-    TasksStateType,
-    TaskStatuses, tasksThunks,
-} from "./Todolist/Task/tasks-reducer";
+import { removeTaskTC, TasksStateType, tasksThunks, } from "./Todolist/Task/tasks-reducer";
 import Grid from "@mui/material/Grid";
-import { AddItemForm } from "components/AddItemForm/AddItemForm";
+import { AddItemForm } from "common/components";
 import Paper from "@mui/material/Paper";
 import { Todolist } from "./Todolist/Todolist";
 import { Navigate } from "react-router-dom";
-import { useAppDispatch } from "hooks/useAppDispatch";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { TaskStatuses } from "common/enums";
 
 export const TodolistsList: React.FC = () => {
 

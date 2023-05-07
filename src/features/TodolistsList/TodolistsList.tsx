@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect } from "react";
 import {
     createTodolistTC,
-    fetchTodolistTC,
     FilterValuesType,
     removeTodolistTC,
-    TodolistDomainType,
-    todolistsActions,
+    todolistsActions, todolistsThunks,
     updateTodolistTitleTC
 } from "features/TodolistsList/todolists-reducer";
 import { useSelector } from "react-redux";
-import { AppRootStateType } from "app/store";
-import { removeTaskTC, TasksStateType, tasksThunks, } from "./Todolist/Task/tasks-reducer";
+import { tasksThunks, } from "./Todolist/Task/tasks-reducer";
 import Grid from "@mui/material/Grid";
 import { AddItemForm } from "common/components";
 import Paper from "@mui/material/Paper";
@@ -18,6 +15,7 @@ import { Todolist } from "./Todolist/Todolist";
 import { Navigate } from "react-router-dom";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { TaskStatuses } from "common/enums";
+import { selectIsLoggedIn, selectTasks, selectTodolists } from "features/TodolistsList/todolistsList.selectors";
 
 export const TodolistsList: React.FC = () => {
 
@@ -26,16 +24,16 @@ export const TodolistsList: React.FC = () => {
             return
         }
 
-        dispatch(fetchTodolistTC())
+        dispatch(todolistsThunks.fetchTodolists({}))
     }, [])
 
-    const isLoggedIn = useSelector<AppRootStateType>(state => state.auth.isLoggedIn)
-    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
+    const todolists = useSelector(selectTodolists)
+    const tasks = useSelector(selectTasks)
     const dispatch = useAppDispatch();
 
-    const removeTask = useCallback(function (id: string, todolistId: string) {
-        dispatch(removeTaskTC(id, todolistId));
+    const removeTask = useCallback(function (taskId: string, todolistId: string) {
+        dispatch(tasksThunks.removeTask({todolistId, taskId}));
     }, []);
     const addTask = useCallback(function (title: string, todolistId: string) {
         dispatch(tasksThunks.addTask({title, todolistId}));

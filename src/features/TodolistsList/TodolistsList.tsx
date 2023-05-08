@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import {
-    createTodolistTC,
-    FilterValuesType,
-    removeTodolistTC,
-    todolistsActions, todolistsThunks,
-    updateTodolistTitleTC
-} from "features/TodolistsList/todolists-reducer";
+import { FilterValuesType, todolistsActions, todolistsThunks, } from "features/TodolistsList/todolists-reducer";
 import { useSelector } from "react-redux";
 import { tasksThunks, } from "./Todolist/Task/tasks-reducer";
 import Grid from "@mui/material/Grid";
@@ -47,14 +41,14 @@ export const TodolistsList: React.FC = () => {
     const changeFilter = useCallback(function (filter: FilterValuesType, todolistId: string) {
         dispatch(todolistsActions.changeTodolistFilter({id: todolistId, filter}));
     }, []);
-    const removeTodolist = useCallback(function (id: string) {
-        dispatch(removeTodolistTC(id))
+    const removeTodolist = useCallback(function (todolistId: string) {
+        dispatch(todolistsThunks.removeTodolist({todolistId}))
     }, []);
     const changeTodolistTitle = useCallback(function (todolistId: string, title: string) {
-        dispatch(updateTodolistTitleTC(todolistId, title));
+        dispatch(todolistsThunks.updateTodolistTitle({todolistId, title}));
     }, []);
     const addTodolist = useCallback((title: string) => {
-        dispatch(createTodolistTC(title))
+        dispatch(todolistsThunks.createTodolist({title}))
     }, [dispatch]);
 
     if (!isLoggedIn) {

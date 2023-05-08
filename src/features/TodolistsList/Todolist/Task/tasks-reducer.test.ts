@@ -1,5 +1,5 @@
-import { tasksAction, tasksReducer, TasksStateType, tasksThunks } from './tasks-reducer'
-import {todolistsActions} from "features/TodolistsList/todolists-reducer";
+import { tasksReducer, TasksStateType, tasksThunks } from './tasks-reducer'
+import { todolistsActions, todolistsThunks } from "features/TodolistsList/todolists-reducer";
 import { TaskStatuses } from "common/enums/common.enums";
 import { TodolistType } from "features/TodolistsList/todolists-api";
 
@@ -211,7 +211,7 @@ test('title task should be changed', () => {
 
 test('new array should be added when new todolist is added', () => {
     let newTodolist: TodolistType = {title: 'new todolist', addedDate: '', order: 0, id: 'todolistId3' }
-    const endState = tasksReducer(startState, todolistsActions.addTodolist({todolist: newTodolist}))
+    const endState = tasksReducer(startState, todolistsThunks.createTodolist.fulfilled(newTodolist, 'requestId', {title: 'new todolist'}))
     const keys = Object.keys(endState)
     const newKey = keys.find(k => k !== 'todolistId1' && k !== 'todolistId2')
     if (!newKey) {

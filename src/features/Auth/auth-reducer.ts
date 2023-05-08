@@ -4,6 +4,7 @@ import {clearData} from "common/actions/common.actions";
 import { handleServerAppError } from "common/utils/handle-server-app-error";
 import { handleServerNetworkError } from "common/utils/handle-server-network-error";
 import { authAPI, LoginType } from "features/Auth/auth-api";
+import { ResultCode } from "common/enums";
 
 
 const slice = createSlice({
@@ -27,7 +28,7 @@ export const loginTC = (data: LoginType): any => async (dispatch: any) => {
     dispatch(appActions.setAppStatus({status: 'loading'}))
     let login = await authAPI.login(data)
     try {
-        if (login.data.resultCode === 0) {
+        if (login.data.resultCode === ResultCode.success) {
             dispatch(authActions.setIsLoggedIn({isLoggedIn: true}))
             dispatch(appActions.setAppStatus({status: 'succeeded'}))
         } else {
@@ -43,7 +44,7 @@ export const logoutTC = (): any => async (dispatch: any) => {
     dispatch(appActions.setAppStatus({status: 'loading'}))
     let logout = await authAPI.logout()
     try {
-        if (logout.data.resultCode === 0) {
+        if (logout.data.resultCode === ResultCode.success) {
             dispatch(authActions.setIsLoggedIn({isLoggedIn: false}))
             dispatch(appActions.setAppStatus({status: 'succeeded'}))
             dispatch(clearData())

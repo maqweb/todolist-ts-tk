@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authActions} from "features/Auth/auth-reducer";
 import { handleServerAppError, handleServerNetworkError } from "common/utils";
 import { authAPI } from "features/Auth/auth-api";
+import { ResultCode } from "common/enums";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -37,7 +38,7 @@ export const initializeAppTC = (): any => async (dispatch: any) => {
     dispatch(appActions.setAppStatus({status: 'loading'}))
     let authMe = await authAPI.me()
     try {
-        if (authMe.data.resultCode === 0) {
+        if (authMe.data.resultCode === ResultCode.success) {
             dispatch(authActions.setIsLoggedIn({isLoggedIn: true}))
         } else {
             handleServerAppError(authMe.data, dispatch)

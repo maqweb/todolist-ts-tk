@@ -53,7 +53,7 @@ const removeTask = createAppAsyncThunk<any, {todolistId: string, taskId: string}
     dispatch(appActions.setAppStatus({status: 'loading'}))
     try {
         let res = await todolistAPI.deleteTask(arg.todolistId, arg.taskId)
-        if (res.data.resultCode === 0) {
+        if (res.data.resultCode === ResultCode.success) {
             dispatch(appActions.setAppStatus({status: 'succeeded'}))
             return arg
         } else {
@@ -127,14 +127,14 @@ const slice = createSlice({
                 const index = tasks.findIndex(t => t.id === action.payload.taskId)
                 if (index !== -1) tasks[index] = {...tasks[index], ...action.payload.model}
             })
-            .addCase(todolistsActions.addTodolist, (state, action) => {
-                state[action.payload.todolist.id] = []
+            .addCase(todolistsThunks.createTodolist.fulfilled, (state, action) => {
+                state[action.payload.id] = []
             })
             .addCase(todolistsActions.removeTodolist, (state, action) => {
                 delete state[action.payload.id]
             })
             .addCase(todolistsThunks.fetchTodolists.fulfilled, (state, action) => {
-                action.payload.todolists.forEach((tl: { id: string }) => {
+                action.payload.forEach((tl: { id: string }) => {
                     state[tl.id] = []
                 })
             })

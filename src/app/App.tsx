@@ -13,23 +13,23 @@ import {useDispatch, useSelector} from "react-redux";
 import {ErrorSnackbar} from "common/components/ErrorSnackbar/ErrorSnackbar";
 import {Routes, Route, Navigate} from 'react-router-dom'
 import {Auth} from "features/Auth/Auth";
-import {logoutTC} from 'features/Auth/auth-reducer';
-import { initializeAppTC } from './app-reducer';
 import {selectIsInitialized, selectIsLoggedIn, selectEntityStatus} from "app/app.selectors";
+import { authThunks } from "features/Auth/auth-reducer";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 
 function App() {
 
     const status = useSelector(selectEntityStatus)
     const isInitialized = useSelector(selectIsInitialized)
     const isLoggedIn = useSelector(selectIsLoggedIn)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(initializeAppTC())
+        dispatch(authThunks.initializeApp())
     }, [])
 
     const logoutHandler = useCallback(() => {
-        dispatch(logoutTC())
+        dispatch(authThunks.logout())
     }, [])
 
     if (!isInitialized) {

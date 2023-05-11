@@ -7,9 +7,9 @@ import { AddItemForm } from "common/components";
 import Paper from "@mui/material/Paper";
 import { Todolist } from "./Todolist/Todolist";
 import { Navigate } from "react-router-dom";
-import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { TaskStatuses } from "common/enums";
 import { selectIsLoggedIn, selectTasks, selectTodolists } from "features/TodolistsList/todolistsList.selectors";
+import { useActions } from "common/hooks";
 
 export const TodolistsList: React.FC = () => {
 
@@ -18,38 +18,45 @@ export const TodolistsList: React.FC = () => {
             return
         }
 
-        dispatch(todolistsThunks.fetchTodolists({}))
+        fetchTodolists()
     }, [])
 
     const isLoggedIn = useSelector(selectIsLoggedIn)
     const todolists = useSelector(selectTodolists)
     const tasks = useSelector(selectTasks)
-    const dispatch = useAppDispatch();
+    const {
+        removeTodolist,
+        updateTodolistTitle,
+        createTodolist,
+        fetchTodolists
+    } = useActions(todolistsThunks);
+    const {removeTask, updateTaskModel, addTask} = useActions(tasksThunks)
+    const {changeTodolistFilter} = useActions(todolistsActions)
 
-    const removeTask = useCallback(function (taskId: string, todolistId: string) {
-        dispatch(tasksThunks.removeTask({todolistId, taskId}));
+    const removeTaskCb = useCallback(function (taskId: string, todolistId: string) {
+        removeTask({todolistId, taskId});
     }, []);
-    const addTask = useCallback(function (title: string, todolistId: string) {
-        dispatch(tasksThunks.addTask({title, todolistId}));
+    const addTaskCb = useCallback(function (title: string, todolistId: string) {
+        addTask({title, todolistId});
     }, []);
     const changeStatus = useCallback(function (todolistId: string, taskId: string, status: TaskStatuses,) {
-        dispatch(tasksThunks.updateTaskModel({todolistId, taskId, model: {status}}));
+        updateTaskModel({todolistId, taskId, model: {status}});
     }, []);
     const changeTaskTitle = useCallback(function (todolistId: string, taskId: string, title: string,) {
-        dispatch(tasksThunks.updateTaskModel({todolistId, taskId, model: {title}}));
+        updateTaskModel({todolistId, taskId, model: {title}});
     }, []);
     const changeFilter = useCallback(function (filter: FilterValuesType, todolistId: string) {
-        dispatch(todolistsActions.changeTodolistFilter({id: todolistId, filter}));
+        changeTodolistFilter({id: todolistId, filter});
     }, []);
-    const removeTodolist = useCallback(function (todolistId: string) {
-        dispatch(todolistsThunks.removeTodolist({todolistId}))
+    const removeTodolistCb = useCallback(function (todolistId: string) {
+        removeTodolist({todolistId})
     }, []);
     const changeTodolistTitle = useCallback(function (todolistId: string, title: string) {
-        dispatch(todolistsThunks.updateTodolistTitle({todolistId, title}));
+        updateTodolistTitle({todolistId, title});
     }, []);
     const addTodolist = useCallback((title: string) => {
-        dispatch(todolistsThunks.createTodolist({title}))
-    }, [dispatch]);
+        createTodolist({title})
+    }, []);
 
     if (!isLoggedIn) {
         return <Navigate to={'/login'}/>
@@ -70,12 +77,12 @@ export const TodolistsList: React.FC = () => {
                                 id={tl.id}
                                 title={tl.title}
                                 tasks={allTodolistTasks}
-                                removeTask={removeTask}
+                                removeTaskCb={removeTaskCb}
                                 changeFilter={changeFilter}
-                                addTask={addTask}
+                                addTaskCb={addTaskCb}
                                 changeTaskStatus={changeStatus}
                                 filter={tl.filter}
-                                removeTodolist={removeTodolist}
+                                removeTodolistCb={removeTodolistCb}
                                 changeTaskTitle={changeTaskTitle}
                                 changeTodolistTitle={changeTodolistTitle}
                                 entityStatus={tl.entityStatus}

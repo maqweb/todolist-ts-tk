@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { appActions } from "app/app-reducer";
 import { clearData } from "common/actions/common.actions";
 import { handleServerAppError } from "common/utils/handle-server-app-error";
@@ -17,8 +17,9 @@ export const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginType>('au
             dispatch(appActions.setAppStatus({status: 'succeeded'}))
             return {isLoggedIn: true}
         } else {
-            handleServerAppError(res.data, dispatch)
-            return rejectWithValue(null)
+            const isShowAppError = !res.data.fieldsErrors.length
+            handleServerAppError(res.data, dispatch, isShowAppError)
+            return rejectWithValue(res.data)
         }
     } catch (e) {
         handleServerNetworkError(e, dispatch)
@@ -57,6 +58,7 @@ const initializeApp = createAppAsyncThunk<{isLoggedIn: boolean}, void>
             return {isLoggedIn: true}
         } else {
             // handleServerAppError(res.data, dispatch)
+            dispatch(appActions.setAppStatus({status: 'succeeded'}))
             return rejectWithValue(null)
         }
     } catch (e) {

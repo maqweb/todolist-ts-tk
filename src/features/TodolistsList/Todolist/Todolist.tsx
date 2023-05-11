@@ -17,11 +17,11 @@ type PropsType = {
     title: string
     tasks: Array<TasksType>
     changeFilter: (value: FilterValuesType, todolistId: string) => void
-    addTask: (title: string, todolistId: string) => void
+    addTaskCb: (title: string, todolistId: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, status: TaskStatuses) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
-    removeTask: (taskId: string, todolistId: string) => void
-    removeTodolist: (id: string) => void
+    removeTaskCb: (taskId: string, todolistId: string) => void
+    removeTodolistCb: (id: string) => void
     changeTodolistTitle: (id: string, newTitle: string) => void
     filter: FilterValuesType
     entityStatus: RequestStatusType
@@ -36,11 +36,11 @@ export const Todolist = React.memo(function (props: PropsType) {
 
     console.log('Todolist called')
     const addTask = useCallback((title: string) => {
-        props.addTask(title, props.id)
-    }, [props.addTask, props.id])
+        props.addTaskCb(title, props.id)
+    }, [props.addTaskCb, props.id])
 
     const removeTodolist = () => {
-        props.removeTodolist(props.id)
+        props.removeTodolistCb(props.id)
     }
     const changeTodolistTitle = useCallback((title: string) => {
         props.changeTodolistTitle(props.id, title)
@@ -73,7 +73,7 @@ export const Todolist = React.memo(function (props: PropsType) {
                         key={t.id}
                         task={t}
                         todolistId={props.id}
-                        removeTask={props.removeTask}
+                        removeTaskCb={props.removeTaskCb}
                         changeTaskTitle={props.changeTaskTitle}
                         changeTaskStatus={props.changeTaskStatus}
                         entityStatus={props.entityStatus}

@@ -14,13 +14,13 @@ type TaskPropsType = {
     todolistId: string
     changeTaskStatus: ( todolistId: string, taskId: string, status: TaskStatuses) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
-    removeTask: (taskId: string, todolistId: string) => void
+    removeTaskCb: (taskId: string, todolistId: string) => void
     entityStatus: RequestStatusType
 }
 export const Task = React.memo((props: TaskPropsType) => {
     const entityStatus = useSelector(selectEntityStatus)
     const onClickHandler = useCallback(() => {
-        props.removeTask(props.task.id, props.todolistId)
+        props.removeTaskCb(props.task.id, props.todolistId)
     }, [props.task.id, props.todolistId]);
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {

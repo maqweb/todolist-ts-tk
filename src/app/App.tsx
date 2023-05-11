@@ -1,36 +1,34 @@
-import React, {useCallback, useEffect} from 'react'
+import React, { useCallback, useEffect } from 'react'
 import './App.css';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 // import IconButton from '@mui/material/IconButton';
 // import Typography from '@mui/material/Typography';
+// import {Menu} from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-// import {Menu} from '@mui/icons-material';
-import {TodolistsList} from "features/TodolistsList/TodolistsList";
-import {CircularProgress, LinearProgress} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import {ErrorSnackbar} from "common/components/ErrorSnackbar/ErrorSnackbar";
-import {Routes, Route, Navigate} from 'react-router-dom'
-import {Auth} from "features/Auth/Auth";
-import {selectIsInitialized, selectIsLoggedIn, selectEntityStatus} from "app/app.selectors";
+import { TodolistsList } from "features/TodolistsList/TodolistsList";
+import { CircularProgress, LinearProgress } from "@mui/material";
+import { useSelector } from "react-redux";
+import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { Auth } from "features/Auth/Auth";
+import { selectIsInitialized, selectIsLoggedIn, selectEntityStatus } from "app/app.selectors";
 import { authThunks } from "features/Auth/auth-reducer";
-import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { useActions } from "common/hooks";
 
 function App() {
 
     const status = useSelector(selectEntityStatus)
     const isInitialized = useSelector(selectIsInitialized)
     const isLoggedIn = useSelector(selectIsLoggedIn)
-    const dispatch = useAppDispatch()
+    const {logout, initializeApp} = useActions(authThunks)
 
     useEffect(() => {
-        dispatch(authThunks.initializeApp())
+        initializeApp()
     }, [])
 
-    const logoutHandler = useCallback(() => {
-        dispatch(authThunks.logout())
-    }, [])
+    const logoutHandler = () => logout();
 
     if (!isInitialized) {
         return <div

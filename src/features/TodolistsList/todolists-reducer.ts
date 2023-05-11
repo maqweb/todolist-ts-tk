@@ -5,9 +5,8 @@ import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } f
 import { todolistAPI, TodolistType } from "features/TodolistsList/todolists-api";
 import { tasksThunks } from "features/TodolistsList/Todolist/Task/tasks-reducer";
 import { ResultCode } from "common/enums";
-import { ResponseDataType } from "common/types";
 
-const fetchTodolists = createAppAsyncThunk<TodolistType[], {}>
+const fetchTodolists = createAppAsyncThunk<TodolistType[], void>
 ('todolists/fetchTodolist', async (arg, thunkAPI) => {
     const {dispatch, rejectWithValue} = thunkAPI
     dispatch(appActions.setAppStatus({ status: 'loading' }))

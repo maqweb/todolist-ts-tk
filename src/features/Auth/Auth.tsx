@@ -7,12 +7,14 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useFormik} from 'formik';
-import { useSelector} from "react-redux";
+import { Formik, FormikHelpers, useFormik } from 'formik';
+import { useSelector } from "react-redux";
 import { Navigate } from 'react-router-dom';
-import {selectIsLoggedIn} from "features/Auth/auth.selectors";
+import { selectIsLoggedIn } from "features/Auth/auth.selectors";
 import { authThunks } from "features/Auth/auth-reducer";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
+import { ResponseDataType } from "common/types";
+import { LoginType } from "features/Auth/auth-api";
 
 
 type FormikErrorType = {
@@ -24,19 +26,19 @@ type FormikErrorType = {
 const validate = (values: FormikErrorType) => {
     const errors: FormikErrorType = {}
 
-    if (!values.email) {
-        errors.email = 'Required'
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
-    }
+    // if (!values.email) {
+    //     errors.email = 'Required'
+    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    //     errors.email = 'Invalid email address'
+    // }
+    //
+    // if (!values.password) {
+    //     errors.password = 'Required'
+    // } else if (values.password.length < 3) {
+    //     errors.password = 'The password must be more than 3 characters'
+    // }
 
-    if (!values.password) {
-        errors.password = 'Required'
-    } else if (values.password.length < 3) {
-        errors.password = 'The password must be more than 3 characters'
-    }
-
-    return errors
+    // return errors
 }
 
 export const Auth = () => {
@@ -51,11 +53,17 @@ export const Auth = () => {
             rememberMe: false
         },
         validate,
-        onSubmit: values => {
+        onSubmit: (values, formikHelpers: FormikHelpers<LoginType>) => {
             dispatch(authThunks.login(values))
-            formik.resetForm({
-                values: {email: '', password: '', rememberMe: false}
-            })
+                .unwrap()
+                .catch((reason: ResponseDataType) => {
+                    reason.fieldsErrors.forEach((fieldError) => {
+                        formikHelpers.setFieldError(fieldError.field, fieldError.error)
+                    })
+                })
+            // formik.resetForm({
+            //     values: {email: '', password: '', rememberMe: false}
+            // })
         },
     })
 
@@ -84,22 +92,24 @@ export const Auth = () => {
                             margin="normal"
                             {...formik.getFieldProps('email')}
                         />
-                        {
+                        {/*{
                             formik.touched.email && formik.errors.email
                                 ? <div style={{color: 'red'}}>{formik.errors.email}</div>
                                 : null
-                        }
+                        }*/}
+                        {formik.errors.email ? <div style={{color: 'red'}}>{formik.errors.email}</div> : null}
                         <TextField
                             type="password"
                             label="Password"
                             margin="normal"
                             {...formik.getFieldProps('password')}
                         />
-                        {
+                        {/*{
                             formik.touched.password && formik.errors.password
                                 ? <div style={{color: 'red'}}>{formik.errors.password}</div>
                                 : null
-                        }
+                        }*/}
+                        {formik.errors.password ? <div style={{color: 'red'}}>{formik.errors.password}</div> : null}
                         <FormControlLabel label={'Remember me'} control={<Checkbox onChange={formik.handleChange}
                                                                                    checked={formik.values.rememberMe}
                                                                                    name={'rememberMe'}

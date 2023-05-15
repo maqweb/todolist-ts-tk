@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
-import './App.css';
+import React, { useEffect } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 // import IconButton from '@mui/material/IconButton';
@@ -7,15 +6,16 @@ import Toolbar from '@mui/material/Toolbar';
 // import {Menu} from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { TodolistsList } from "features/TodolistsList/TodolistsList";
+import { TodolistsList } from "features/todolists-list/TodolistsList";
 import { CircularProgress, LinearProgress } from "@mui/material";
 import { useSelector } from "react-redux";
 import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Auth } from "features/Auth/Auth";
+import { Auth } from "features/auth/Auth";
 import { selectIsInitialized, selectIsLoggedIn, selectEntityStatus } from "app/app.selectors";
-import { authThunks } from "features/Auth/auth-reducer";
+import { authThunks } from "features/auth/auth-reducer";
 import { useActions } from "common/hooks";
+import s from './styles.module.css'
 
 function App() {
 
@@ -25,10 +25,10 @@ function App() {
     const {logout, initializeApp} = useActions(authThunks)
 
     useEffect(() => {
-        initializeApp()
+        initializeApp({})
     }, [])
 
-    const logoutHandler = () => logout();
+    const logoutHandler = () => logout({});
 
     if (!isInitialized) {
         return <div
@@ -48,9 +48,11 @@ function App() {
                         {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
                     </>
                 </Toolbar>
-                {status === 'loading' && <LinearProgress/>}
+                <div className={s.lineProgress}>
+                    {status === 'loading' && <LinearProgress/>}
+                </div>
             </AppBar>
-            <Container fixed>
+            <Container fixed className={'container'}>
                 <Routes>
                     <Route path={'/'} element={<TodolistsList/>}/>
                     <Route path={'/login'} element={<Auth/>}/>

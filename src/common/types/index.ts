@@ -1,1 +1,1 @@
-export type { ResponseDataType } from './common.types'
+export type { ResponseDataType } from "./common.types";

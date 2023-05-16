@@ -1,3 +1,3 @@
-import {AppRootStateType} from "app/store";
+import { AppRootStateType } from "app/store";
 
-export const selectEntityStatus = (state: AppRootStateType) => state.app.status
+export const selectEntityStatus = (state: AppRootStateType) => state.app.status;

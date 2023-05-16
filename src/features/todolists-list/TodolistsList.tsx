@@ -13,61 +13,56 @@ import { Navigate } from "react-router-dom";
 import {
     selectIsLoggedIn,
     selectTasks,
-    selectTodolists
+    selectTodolists,
 } from "features/todolists-list/todolists/todolistsList.selectors";
 import { useActions } from "common/hooks";
-import s from './styles.module.css'
+import s from "./styles.module.css";
 
 export const TodolistsList: FC = () => {
-
     useEffect(() => {
         if (!isLoggedIn) {
-            return
+            return;
         }
-        fetchTodolists({})
-    }, [])
+        fetchTodolists({});
+    }, []);
 
-    const isLoggedIn = useSelector(selectIsLoggedIn)
-    const todolists = useSelector(selectTodolists)
-    const tasks = useSelector(selectTasks)
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const todolists = useSelector(selectTodolists);
+    const tasks = useSelector(selectTasks);
 
-    const {createTodolist, fetchTodolists} = useActions(todolistsThunks);
-    const {changeTodolistFilter} = useActions(todolistsActions)
+    const { createTodolist, fetchTodolists } = useActions(todolistsThunks);
+    const { changeTodolistFilter } = useActions(todolistsActions);
 
     const changeFilter = useCallback(function (filter: FilterValuesType, todolistId: string) {
-        changeTodolistFilter({id: todolistId, filter});
+        changeTodolistFilter({ id: todolistId, filter });
     }, []);
 
     const addTodolistHandler = useCallback((title: string) => {
-        return createTodolist({title}).unwrap()
+        return createTodolist({ title }).unwrap();
     }, []);
 
     if (!isLoggedIn) {
-        return <Navigate to={'/login'}/>
+        return <Navigate to={"/login"} />;
     }
 
-    return <>
-        <Grid container style={{padding: '20px'}}>
-            <AddItemForm addItem={addTodolistHandler}/>
-        </Grid>
-        <Grid container spacing={3}>
-            {
-                todolists.map(tl => {
+    return (
+        <>
+            <Grid container style={{ padding: "20px" }}>
+                <AddItemForm addItem={addTodolistHandler} />
+            </Grid>
+            <Grid container spacing={3}>
+                {todolists.map((tl) => {
                     let allTodolistTasks = tasks[tl.id];
 
                     return (
                         <Grid item key={tl.id}>
                             <Paper className={s.paper}>
-                                <Todolist
-                                    todolist={tl}
-                                    tasks={allTodolistTasks}
-                                    changeFilter={changeFilter}
-                                />
+                                <Todolist todolist={tl} tasks={allTodolistTasks} changeFilter={changeFilter} />
                             </Paper>
                         </Grid>
-                    )
-                })
-            }
-        </Grid>
-    </>
-}
+                    );
+                })}
+            </Grid>
+        </>
+    );
+};

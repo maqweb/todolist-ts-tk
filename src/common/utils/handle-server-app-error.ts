@@ -11,7 +11,7 @@ import { Dispatch } from "redux";
 
 export const handleServerAppError = <T>(data: ResponseDataType<T>, dispatch: Dispatch, showError: boolean = true) => {
     if (showError) {
-        dispatch(appActions.setAppError({error: data.messages.length ? data.messages[0] :'Some error occurred'}))
+        dispatch(appActions.setAppError({ error: data.messages.length ? data.messages[0] : "Some error occurred" }));
     }
-    dispatch(appActions.setAppStatus({status: 'failed'}))
-}
+    dispatch(appActions.setAppStatus({ status: "failed" }));
+};

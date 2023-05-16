@@ -1,49 +1,67 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
 
 const initialState = {
-    status: 'idle' as RequestStatusType,
+    status: "idle" as RequestStatusType,
     error: null as string | null,
-    initialized: false
-}
+    initialized: false,
+};
 
-export type AppInitialStateType = typeof initialState
+export type AppInitialStateType = typeof initialState;
 
 const slice = createSlice({
-    name: 'app',
+    name: "app",
     initialState,
     reducers: {
         setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
-            state.status = action.payload.status
+            state.status = action.payload.status;
         },
         setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
-            state.error = action.payload.error
+            state.error = action.payload.error;
         },
-        setInitialized: (state, action: PayloadAction<{initialized: boolean}>) => {
-            state.initialized = action.payload.initialized
-        }
+        setInitialized: (state, action: PayloadAction<{ initialized: boolean }>) => {
+            state.initialized = action.payload.initialized;
+        },
     },
-    extraReducers: builder => {
+    extraReducers: (builder) => {
         builder
-            .addMatcher((action) => {
-                return action.type.endsWith('/pending')
-            }, (state, action) => {
-                state.status = 'loading'
-            })
-            .addMatcher((action) => {
-                return action.type.endsWith('/rejected')
-            }, (state, action) => {
-                state.error = action.payload.messages[0]
-                state.status = 'failed'
-            })
-            .addMatcher((action) => {
-                return action.type.endsWith('/fulfilled')
-            }, (state, action) => {
-                state.status = 'succeeded'
-            })
-    }
-})
+            .addMatcher(
+                (action) => {
+                    return action.type.endsWith("/pending");
+                },
+                (state, action) => {
+                    state.status = "loading";
+                }
+            )
+            .addMatcher(
+                (action) => {
+                    return action.type.endsWith("/rejected");
+                },
+                (state, action) => {
+                    const { payload, error } = action;
+                    if (payload) {
+                        if (payload.showGlobalError) {
+                            state.error = payload.data.messages.length
+                                ? payload.data.messages[0]
+                                : "Some error occurred";
+                        }
+                    } else {
+                        state.error = error.message ? error.message : "Some error occurred";
+                    }
+                    state.status = "failed";
+                }
+            )
+            .addMatcher(
+                (action) => {
+                    return action.type.endsWith("/fulfilled");
+                },
+                (state, action) => {
+                    state.status = "succeeded";
+                }
+            );
+    },
+});
 
-export const appReducer = slice.reducer
-export const appActions = slice.actions
+export const appReducer = slice.reducer;
+export const appActions = slice.actions;
